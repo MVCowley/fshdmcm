@@ -33,12 +33,15 @@ with ui.card(full_screen=True):
 
         values, omega_s = single_markov_chain.calc_array(input.param(), real_params, -4, 4)
 
+        colours = {"DUX4 transcription rate": "C0", "DUX4 mRNA degredation rate": "C1", "DUX4 target transcription rate": "C2", 
+         "DUX4 translation rate": "C3", "Death rate": "C4", "DUX4 syncytial diffusion rate": "C5"}
+
         fig, ax = plt.subplots(figsize=(3, 3))
-        ax.plot(values, omega_s)
+        ax.plot(values, omega_s, c=colours[input.param()])
 
         ax.set_xscale('log')
 
-        ax.set_xlabel(f'Fold change in variable parameter')
+        ax.set_xlabel(f'Fold change in {input.param()}')
         ax.set_ylabel(r'Fold change  $\omega_S$')
 
         ax.set_xlim(1e-4, 1e4)
