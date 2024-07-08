@@ -1,68 +1,71 @@
+import matplotlib.pyplot as plt
 import numpy as np
+from shiny import render, reactive
 from shiny.express import input, render, ui
 import single_markov_chain
-import matplotlib.pyplot as plt
 
-ui.page_opts(fillable=True)
+import fields
+
+FIELDS = fields.get_field_strings()
+
+ui.page_opts(fillable=True, title="FSHD Markov Chain Model")
 
 with ui.sidebar():
     ui.input_selectize(
-        "param",
-        "Select $x$-axis parameter",
-        [
-            "DUX4 transcription rate",
-            "DUX4 mRNA degredation rate",
-            "D4T transcription rate",
-            "DUX4 mRNA translation rate",
-            "D4T$^{+}$ myonuclear apoptosis rate",
-            "DUX4 & D4T syncytial diffusion rate",
-        ],
+        id="param",
+        label="Select x-axis parameter",
+        choices=[field for field in FIELDS],
     )
-    "Fixed parameters"
+
+    "Set other parameters"
+
     ui.input_slider(
         "vd",
-        "log10(Fold change in DUX4 transcription rate)",
+        f"log10(Fold change in {FIELDS[0]})",
         np.log10(1e-4),
         np.log10(1e4),
         np.log10(1),
     )
     ui.input_slider(
         "d0",
-        "log10(Fold change in DUX4 mRNA degredation rate)",
+        f"log10(Fold change in {FIELDS[1]})",
         np.log10(1e-4),
         np.log10(1e4),
         np.log10(1),
     )
     ui.input_slider(
         "vt",
-        "log10(Fold change in DUX4 target transcription rate)",
+        f"log10(Fold change in {FIELDS[2]})",
         np.log10(1e-4),
         np.log10(1e4),
         np.log10(1),
     )
     ui.input_slider(
         "td",
-        "log10(Fold change in DUX4 translation rate)",
+        f"log10(Fold change in {FIELDS[3]})",
         np.log10(1e-4),
         np.log10(1e4),
         np.log10(1),
     )
     ui.input_slider(
         "dr",
-        "log10(Fold change in death rate)",
+        f"log10(Fold change in {FIELDS[4]})",
         np.log10(1e-4),
         np.log10(1e4),
         np.log10(1),
     )
     ui.input_slider(
         "delta",
-        "log10(Fold change in DUX4 syncytial diffusion rate)",
+        f"log10(Fold change in {FIELDS[5]})",
         np.log10(1e-4),
         np.log10(1e4),
         np.log10(1),
     )
+    # Reset button
+    ui.input_action_button("reset", "Reset sliders")
+    ui.input_dark_mode()
 
-"Single parameter plot"
+"Calculated myonuclear lifetime"
 
 with ui.card(full_screen=True):
 
@@ -81,14 +84,7 @@ with ui.card(full_screen=True):
             input.param(), real_params, -4, 4
         )
 
-        colours = {
-            "DUX4 transcription rate": "C0",
-            "DUX4 mRNA degredation rate": "C1",
-            "DUX4 target transcription rate": "C2",
-            "DUX4 translation rate": "C3",
-            "Death rate": "C4",
-            "DUX4 syncytial diffusion rate": "C5",
-        }
+        colours = {field: f"C{n}" for n, field in enumerate(FIELDS)}
 
         fig, ax = plt.subplots(figsize=(3, 3))
         ax.plot(values, omega_s, c=colours[input.param()])
@@ -96,7 +92,14 @@ with ui.card(full_screen=True):
         ax.set_xscale("log")
 
         ax.set_xlabel(f"Fold change in {input.param()}")
-        ax.set_ylabel(r"Fold change  $\omega_S$")
+        ax.set_ylabel("Fold change in myonuclear lifetime")
 
         ax.set_xlim(1e-4, 1e4)
         fig.tight_layout()
+
+
+@reactive.effect
+@reactive.event(input.reset)
+def _():
+    for param in ["vd", "d0", "vt", "td", "dr", "delta"]:
+        ui.update_slider(param, value=0)

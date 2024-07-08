@@ -1,6 +1,9 @@
 import numpy as np
 import copy
 import matplotlib.pyplot as plt
+import fields
+
+FIELDS = fields.get_field_strings()
 
 
 def gen_parameters(param_list, param, mod):
@@ -76,14 +79,7 @@ def calc_omega_s(parameters):
 def calc_array(
     modified_param: str, param_list: list, logmin: int, logmax: int
 ) -> np.array:
-    param_converter = {
-        "DUX4 transcription rate": 0,
-        "DUX4 mRNA degredation rate": 1,
-        "DUX4 target transcription rate": 2,
-        "DUX4 translation rate": 3,
-        "Death rate": 4,
-        "DUX4 syncytial diffusion rate": 5,
-    }
+    param_converter = {field: n for n, field in enumerate(FIELDS)}
 
     base = calc_omega_s(param_list)
     values = np.logspace(logmin, logmax, 100)
