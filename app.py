@@ -12,13 +12,8 @@ ui.page_opts(fillable=True, title="FSHD Markov Chain Model")
 
 
 with ui.sidebar():
-    ui.input_selectize(
-        id="param",
-        label="Select x-axis parameter",
-        choices=[field for field in FIELDS],
-    )
 
-    "Set other parameters"
+    "Set base parameters:"
 
     ui.input_slider(
         "vd",
@@ -67,9 +62,14 @@ with ui.sidebar():
     ui.input_dark_mode()
 
 with ui.navset_card_tab(id="tab"):
-    with ui.nav_panel("Myonuclear Lifetime"):
+    with ui.nav_panel("Lifetime"):
 
         with ui.card(full_screen=True):
+            ui.input_selectize(
+                id="param",
+                label="Select x-axis parameter",
+                choices=[field for field in FIELDS],
+            )
 
             @render.plot
             def mc_plot():
@@ -99,8 +99,14 @@ with ui.navset_card_tab(id="tab"):
                 ax.set_ylabel("Fold change in myonuclear lifetime")
 
                 ax.set_xlim(1e-4, 1e4)
+                ax.set_box_aspect(1)
                 fig.tight_layout()
 
+    with ui.nav_panel("Sensitivity"):
+        "stuff"
+
+    with ui.nav_panel("Interaction"):
+        "stuff"
 
         @reactive.effect
         @reactive.event(input.reset)
