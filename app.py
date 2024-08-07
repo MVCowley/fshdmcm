@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from shiny import render, reactive
 from shiny.express import input, render, ui
-import single_markov_chain
+import analytical
+import interaction
 
 import fields
 
@@ -82,15 +83,14 @@ with ui.navset_card_tab(id="tab"):
                     (0.04023596) * 10 ** input.delta(),
                 ]
 
-                values, omega_s = single_markov_chain.calc_array(
+                values, omega_s = analytical.calc_array(
                     input.param(), real_params, -4, 4
                 )
 
                 colours = {field: f"C{n}" for n, field in enumerate(FIELDS)}
 
-                subplots = plt.subplots(figsize=(3, 3))
-                fig: plt.Figure = subplots[0]
-                ax: plt.Axes = subplots[1]
+                ax: plt.Axes
+                fig, ax = plt.subplots(figsize=(3, 3))
                 ax.plot(values, omega_s, c=colours[input.param()])
 
                 ax.set_xscale("log")
@@ -106,7 +106,36 @@ with ui.navset_card_tab(id="tab"):
         "stuff"
 
     with ui.nav_panel("Interaction"):
-        "stuff"
+
+        with ui.card(full_screen=True):
+            choices = [field for field in FIELDS]
+            ui.input_selectize(
+                id="param1",
+                label="Select first parameter",
+                choices=choices,
+                selected=choices[0],
+            )
+            ui.input_selectize(
+                id="param2",
+                label="Select second parameter",
+                choices=choices,
+                selected=choices[1],
+            )
+
+            @render.plot
+            def interaction_plot():
+                real_params = [
+                    (0.00211) * 10 ** input.vd(),
+                    (0.246) * 10 ** input.d0(),
+                    (6.41) * 10 ** input.vt(),
+                    (1 / 13) * 10 ** input.td(),
+                    (1 / 20.2) * 10 ** input.dr(),
+                    (0.04023596) * 10 ** input.delta(),
+                ]
+
+                interaction.interaction_plot(
+                    real_params, input.param1(), input.param2()
+                )
 
         @reactive.effect
         @reactive.event(input.reset)
