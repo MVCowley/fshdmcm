@@ -46,8 +46,8 @@ def interaction_plot(params, param1, param2):
     # Calculate consistent vmin and vmax for color scale across all plots
     values = np.logspace(-2, 2, 100)
     base = calc_omega_s(params)
-    log_data = diff / base + 1
-    cparam = np.max(log_data)
+    norm_data = diff / base + 1
+    cparam = np.max(norm_data)
     levels = np.linspace(-cparam, cparam, int((cparam - (-cparam)) / 0.1) + 1)
 
     # Create pairwise heatmap plot
@@ -68,12 +68,13 @@ def interaction_plot(params, param1, param2):
         if i[0] == param1_n and i[1] == param2_n:
             index = n
 
-    ax: plt.Axes
-    fig, ax = plt.subplots(figsize=(4, 4))
+    axs: list[plt.Axes]
+    fig, axs = plt.subplots(ncols=2, figsize=(4, 8))
+    ax = axs[0]
     CS = ax.contourf(
         values,
         values,
-        log_data[index],
+        norm_data[index],
         levels=levels,
         cmap="RdBu",
     )
@@ -90,5 +91,39 @@ def interaction_plot(params, param1, param2):
     ax.axhline(1, c="k", ls="--", alpha=0.5)
     ax.axvline(1, c="k", ls="--", alpha=0.5)
     ax.set_box_aspect(1)
-    fig.colorbar(CS, label=r"$\mathbf{I}_{ij}$")
+    fig.colorbar(CS, label=r"$\mathbf{I}_{ij}$", ax=ax)
+    fig.tight_layout()
+
+    ax = axs[1]
+    combined_array = np.empty((6, 6))
+
+    # Set the diagonal to NaN
+    np.fill_diagonal(combined_array, np.nan)
+
+    for combo, pair in zip(norm_data, pair_array):
+        combined_array[pair[0], pair[1]] = np.nanmax(combo)
+        combined_array[pair[1], pair[0]] = np.nanmin(combo)
+
+    if np.nanmin(combined_array) < np.nanmax(combined_array):
+        lim_func = np.nanmax
+    elif np.nanmax(combined_array) < np.nanmin(combined_array):
+        lim_func = lambda x: -1 * np.nanmin(x)
+
+    limits = lim_func(combined_array)
+
+    # for diff_type, color in zip([max_diff_array, min_diff_array], ['Blues', 'Reds_r']):
+    cax = ax.imshow(
+        combined_array,
+        interpolation="nearest",
+        cmap="RdBu",
+        vmin=-limits,
+        vmax=limits,
+    )
+    ax.set_xticks(np.arange(len(param_labels)))
+    ax.set_yticks(np.arange(len(param_labels)))
+    ax.set_xticklabels(param_labels)
+    ax.set_yticklabels(param_labels)
+
+    # Add colorbar
+    fig.colorbar(cax, label=r"$\mathbf{I}_{ij}$", ax=ax)
     fig.tight_layout()
