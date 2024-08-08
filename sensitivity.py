@@ -35,7 +35,7 @@ def plot_sensitivity(param_list):
     ]
 
     ax: plt.Axes
-    fig, ax = plt.subplots(figsize=(4, 4))
+    fig, ax = plt.subplots()
 
     rate_labels = ["$V_D$", "$d_0$", "$V_T$", "$T_D$", "$D_r$", r"$\Delta$"]
     colors = ["C0", "C1", "C2", "C3", "C4", "C5"]

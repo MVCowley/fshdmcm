@@ -11,7 +11,7 @@ def plot_lifetime(input_param, real_params):
     }
 
     ax: plt.Axes
-    fig, ax = plt.subplots(figsize=(3, 3))
+    fig, ax = plt.subplots()
     ax.plot(values, omega_s, c=colours[input_param])
 
     ax.set_xscale("log")
@@ -20,5 +20,4 @@ def plot_lifetime(input_param, real_params):
     ax.set_ylabel("Fold change in myonuclear lifetime")
 
     ax.set_xlim(1e-4, 1e4)
-    ax.set_box_aspect(1)
     fig.tight_layout()

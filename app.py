@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+import asyncio
 import numpy as np
 from shiny import render, reactive
 from shiny.express import input, render, ui
@@ -25,7 +25,7 @@ with ui.sidebar():
         "D_r = D4T+ myonuclear apoptosis rate; "
         "Delta = DUX4 syncytial diffusion rate; "
 
-    "Set base parameters:"
+    ui.h5("Set base parameters:")
 
     ui.input_slider(
         "vd",
@@ -83,7 +83,9 @@ with ui.navset_card_tab(id="tab"):
                 choices=[field for field in FIELDS],
             )
 
-            @render.plot
+            @render.plot(
+                alt="Line plot showing the lifetime of myonuclear cells"
+            )
             def mc_plot():
                 real_params = [
                     (0.00211) * 10 ** input.vd(),
@@ -100,7 +102,7 @@ with ui.navset_card_tab(id="tab"):
 
         with ui.card(full_screen=True):
 
-            @render.plot
+            @render.plot(alt="Bar plot showing sensitivity of parameters")
             def plot_sensitivity():
                 real_params = [
                     (0.00211) * 10 ** input.vd(),
@@ -122,16 +124,28 @@ with ui.navset_card_tab(id="tab"):
                 label="Select first parameter",
                 choices=choices,
                 selected=choices[0],
+                width="33%",
             )
             ui.input_selectize(
                 id="param2",
                 label="Select second parameter",
                 choices=choices,
                 selected=choices[1],
+                width="33%",
             )
 
-            @render.plot
-            def interaction_plot():
+            ui.input_task_button(
+                "go", "Calculate!", class_="btn-success", width="33%"
+            )
+
+            @ui.bind_task_button(button_id="go")
+            @reactive.extended_task
+            async def interaction_plot(real_params, param1, param2):
+                await interaction.interaction_plot(real_params, param1, param2)
+
+            @reactive.effect
+            @reactive.event(input.go, ignore_none=False, ignore_init=True)
+            def handle_click():
                 real_params = [
                     (0.00211) * 10 ** input.vd(),
                     (0.246) * 10 ** input.d0(),
@@ -141,9 +155,11 @@ with ui.navset_card_tab(id="tab"):
                     (0.04023596) * 10 ** input.delta(),
                 ]
 
-                interaction.interaction_plot(
-                    real_params, input.param1(), input.param2()
-                )
+                interaction_plot(real_params, input.param1(), input.param2())
+
+            @render.plot(alt="A pair of heatmaps showing parameter interaction")
+            def show_plot():
+                return interaction_plot.result()
 
         @reactive.effect
         @reactive.event(input.reset)
