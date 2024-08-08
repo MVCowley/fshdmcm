@@ -47,7 +47,7 @@ def interaction_plot(params, param1, param2):
     values = np.logspace(-2, 2, 100)
     base = calc_omega_s(params)
     log_data = diff / base + 1
-    cparam = 45
+    cparam = np.max(log_data)
     levels = np.linspace(-cparam, cparam, int((cparam - (-cparam)) / 0.1) + 1)
 
     # Create pairwise heatmap plot
