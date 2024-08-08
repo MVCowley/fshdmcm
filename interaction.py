@@ -56,6 +56,8 @@ def interaction_plot(params, param1, param2):
         raise ValueError(
             "Can't compute the interaction of a parameter with itself"
         )
+    if param1_n > param2_n:
+        param1_n, param2_n = param2_n, param1_n
 
     for n, i in enumerate(pair_array):
         if i[0] == param1_n and i[1] == param2_n:
