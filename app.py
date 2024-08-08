@@ -83,7 +83,9 @@ with ui.navset_card_tab(id="tab"):
                 choices=[field for field in FIELDS],
             )
 
-            @render.plot
+            @render.plot(
+                alt="Line plot showing the lifetime of myonuclear cells"
+            )
             def mc_plot():
                 real_params = [
                     (0.00211) * 10 ** input.vd(),
@@ -100,7 +102,7 @@ with ui.navset_card_tab(id="tab"):
 
         with ui.card(full_screen=True):
 
-            @render.plot
+            @render.plot(alt="Bar plot showing sensitivity of parameters")
             def plot_sensitivity():
                 real_params = [
                     (0.00211) * 10 ** input.vd(),
