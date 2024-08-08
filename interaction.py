@@ -1,6 +1,7 @@
 import fields
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 from numerical import (
     calc_omega_s,
     calc_pair_array,
@@ -69,7 +70,7 @@ def interaction_plot(params, param1, param2):
             index = n
 
     axs: list[plt.Axes]
-    fig, axs = plt.subplots(ncols=2, figsize=(4, 8))
+    fig, axs = plt.subplots(ncols=2, figsize=(7, 14))
     ax = axs[0]
     CS = ax.contourf(
         values,
@@ -91,7 +92,14 @@ def interaction_plot(params, param1, param2):
     ax.axhline(1, c="k", ls="--", alpha=0.5)
     ax.axvline(1, c="k", ls="--", alpha=0.5)
     ax.set_box_aspect(1)
-    fig.colorbar(CS, label=r"$\mathbf{I}_{ij}$", ax=ax)
+
+    # divider = make_axes_locatable(ax)
+    # cax = divider.append_axes("right", size="5%", pad=0.05)
+    # fig.add_axes(cax)
+    # plt.colorbar(CS, cax=cax, label=r"$\mathbf{I}_{ij}$")
+    fig.colorbar(
+        CS, label=r"$\mathbf{I}_{ij}$", ax=ax, fraction=0.046, pad=0.04
+    )
     fig.tight_layout()
 
     ax = axs[1]
@@ -125,5 +133,7 @@ def interaction_plot(params, param1, param2):
     ax.set_yticklabels(param_labels)
 
     # Add colorbar
-    fig.colorbar(cax, label=r"$\mathbf{I}_{ij}$", ax=ax)
+    fig.colorbar(
+        cax, label=r"$\mathbf{I}_{ij}$", ax=ax, fraction=0.046, pad=0.04
+    )
     fig.tight_layout()
