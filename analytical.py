@@ -1,7 +1,8 @@
-import numpy as np
 import copy
-import matplotlib.pyplot as plt
 import fields
+import logrange
+import matplotlib.pyplot as plt
+import numpy as np
 
 FIELDS = fields.get_field_strings()
 
@@ -76,13 +77,11 @@ def calc_omega_s(parameters):
     ) / (e * (a * c * d + a * f + b * f + c * d * f + f**2))
 
 
-def calc_array(
-    modified_param: str, param_list: list, logmin: int, logmax: int
-) -> np.array:
+def calc_array(modified_param: str, param_list: list) -> np.array:
     param_converter = {field: n for n, field in enumerate(FIELDS)}
 
     base = calc_omega_s(param_list)
-    values = np.logspace(logmin, logmax, 100)
+    values = logrange.get_large()
     omega_s = []
     for value in values:
         params = gen_parameters(
