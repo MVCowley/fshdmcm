@@ -15,6 +15,16 @@ ui.page_opts(fillable=True, title="FSHD Markov Chain Model")
 
 with ui.sidebar():
 
+    with ui.popover(id="btn_popover"):
+        ui.input_action_button("btn", "Symbols", class_="mt-3")
+
+        "V_D = DUX4 transcription rate; "
+        "d_0 = DUX4 mRNA degradation rate; "
+        "V_T = D4T transcription rate; "
+        "T_D = DUX4 mRNA translation rate; "
+        "D_r = D4T+ myonuclear apoptosis rate; "
+        "Delta = DUX4 syncytial diffusion rate; "
+
     "Set base parameters:"
 
     ui.input_slider(
@@ -61,7 +71,7 @@ with ui.sidebar():
     )
     # Reset button
     ui.input_action_button("reset", "Reset sliders")
-    ui.input_dark_mode()
+    ui.input_dark_mode(mode="light")
 
 with ui.navset_card_tab(id="tab"):
     with ui.nav_panel("Lifetime"):
