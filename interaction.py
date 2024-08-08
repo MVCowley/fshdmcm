@@ -41,7 +41,6 @@ def interaction_plot(params, param1, param2):
     singlets = calc_singlet_omega_s_array(params)
     diff = singlet_to_diff(singlets, pair_array, omega_s_array, params)
 
-    param_names = ["vd", "d0", "vt", "td", "dr", "delta"]
     param_labels = ["$V_D$", "$d_0$", "$V_T$", "$T_D$", "$D_r$", r"$\Delta$"]
 
     # Calculate consistent vmin and vmax for color scale across all plots

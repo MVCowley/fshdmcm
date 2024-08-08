@@ -69,9 +69,6 @@ def gen_two_parameters(param1, param2, mod1, mod2):
 
 
 def calc_pair_array(param_list) -> tuple[np.ndarray, np.ndarray]:
-    # Quick test
-    test = gen_two_parameters(0, 1, 1e1, 1e-4)
-
     # Calculate pairwise combinations
     n = len(param_list)
     k = 2
@@ -122,11 +119,6 @@ def gen_parameters(param, mod):
 
 
 def calc_singlet_omega_s_array(param_list):
-    base = calc_omega_s(param_list)
-
-    # Quick test
-    test = gen_parameters(0, 1e1)
-
     # Create numpy array with parameter ranges
     values = np.logspace(-2, 2, 100)
 
