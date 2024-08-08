@@ -15,4 +15,4 @@ Then run the app with:
 shiny run --launch-browser app.py
 ```
 
-Tested with Python 3.12.4.
+Tested with Python 3.9.19.
