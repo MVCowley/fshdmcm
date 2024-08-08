@@ -31,7 +31,7 @@ def singlet_to_diff(
     return diff_omega_s_array
 
 
-def interaction_plot(params, param1, param2):
+async def interaction_plot(params, param1, param2):
 
     omega_s_array, pair_array = numerical.calc_pair_array(params)
     singlets = numerical.calc_singlet_omega_s_array(params)
