@@ -4,6 +4,7 @@ from shiny import render, reactive
 from shiny.express import input, render, ui
 import analytical
 import interaction
+import sensitivity
 
 import fields
 
@@ -103,7 +104,21 @@ with ui.navset_card_tab(id="tab"):
                 fig.tight_layout()
 
     with ui.nav_panel("Sensitivity"):
-        "stuff"
+
+        with ui.card(full_screen=True):
+
+            @render.plot
+            def plot_sensitivity():
+                real_params = [
+                    (0.00211) * 10 ** input.vd(),
+                    (0.246) * 10 ** input.d0(),
+                    (6.41) * 10 ** input.vt(),
+                    (1 / 13) * 10 ** input.td(),
+                    (1 / 20.2) * 10 ** input.dr(),
+                    (0.04023596) * 10 ** input.delta(),
+                ]
+
+                sensitivity.plot_sensitivity(real_params)
 
     with ui.nav_panel("Interaction"):
 
