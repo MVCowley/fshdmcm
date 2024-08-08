@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from shiny import render, reactive
 from shiny.express import input, render, ui
-import analytical
+import lifetime
 import interaction
 import sensitivity
 
@@ -84,24 +84,7 @@ with ui.navset_card_tab(id="tab"):
                     (0.04023596) * 10 ** input.delta(),
                 ]
 
-                values, omega_s = analytical.calc_array(
-                    input.param(), real_params, -4, 4
-                )
-
-                colours = {field: f"C{n}" for n, field in enumerate(FIELDS)}
-
-                ax: plt.Axes
-                fig, ax = plt.subplots(figsize=(3, 3))
-                ax.plot(values, omega_s, c=colours[input.param()])
-
-                ax.set_xscale("log")
-
-                ax.set_xlabel(f"Fold change in {input.param()}")
-                ax.set_ylabel("Fold change in myonuclear lifetime")
-
-                ax.set_xlim(1e-4, 1e4)
-                ax.set_box_aspect(1)
-                fig.tight_layout()
+                lifetime.plot_lifetime(input.param(), real_params)
 
     with ui.nav_panel("Sensitivity"):
 
