@@ -130,7 +130,12 @@ with ui.navset_card_tab(id="tab"):
                 selected=choices[1],
             )
 
-            @render.plot
+            ui.input_task_button(
+                "go", "Calculate!", class_="btn-success", width="33%"
+            )
+
+            @render.plot(alt="A pair of heatmaps showing parameter interaction")
+            @reactive.event(input.go, ignore_none=False, ignore_init=True)
             def interaction_plot():
                 real_params = [
                     (0.00211) * 10 ** input.vd(),
