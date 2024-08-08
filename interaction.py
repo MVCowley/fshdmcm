@@ -1,12 +1,7 @@
 import fields
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-from numerical import (
-    calc_omega_s,
-    calc_pair_array,
-    calc_singlet_omega_s_array,
-)
+import numerical
 import numpy as np
 
 
@@ -14,7 +9,6 @@ def singlet_to_diff(
     singlet_omega_s_array, pair_array, omega_s_array, param_list
 ):
     values = np.logspace(-2, 2, 100)
-    # Create object to populate with calculated absorption times
     diff_omega_s_array = np.full(
         (len(pair_array), len(values), len(values)), np.nan
     )
@@ -23,9 +17,9 @@ def singlet_to_diff(
     for i in range(len(param_list) - 1):
         for j in range(i + 1, len(param_list)):
             i_values = values
-            for index0, i_value in enumerate(i_values):
+            for index0, _ in enumerate(i_values):
                 j_values = values
-                for index1, j_value in enumerate(j_values):
+                for index1, _ in enumerate(j_values):
                     diff_omega_s_array[
                         diff_combination, index0, index1
                     ] = omega_s_array[diff_combination, index0, index1] - (
@@ -38,20 +32,18 @@ def singlet_to_diff(
 
 def interaction_plot(params, param1, param2):
 
-    omega_s_array, pair_array = calc_pair_array(params)
-    singlets = calc_singlet_omega_s_array(params)
+    omega_s_array, pair_array = numerical.calc_pair_array(params)
+    singlets = numerical.calc_singlet_omega_s_array(params)
     diff = singlet_to_diff(singlets, pair_array, omega_s_array, params)
 
     param_labels = ["$V_D$", "$d_0$", "$V_T$", "$T_D$", "$D_r$", r"$\Delta$"]
 
-    # Calculate consistent vmin and vmax for color scale across all plots
     values = np.logspace(-2, 2, 100)
-    base = calc_omega_s(params)
+    base = numerical.calc_omega_s(params)
     norm_data = diff / base + 1
     cparam = np.max(norm_data)
     levels = np.linspace(-cparam, cparam, int((cparam - (-cparam)) / 0.1) + 1)
 
-    # Create pairwise heatmap plot
     param_converter = {
         field: n for n, field in enumerate(fields.get_field_strings())
     }
@@ -64,7 +56,6 @@ def interaction_plot(params, param1, param2):
             "Can't compute the interaction of a parameter with itself"
         )
 
-    # find i, j in pair_array
     for n, i in enumerate(pair_array):
         if i[0] == param1_n and i[1] == param2_n:
             index = n
@@ -92,11 +83,6 @@ def interaction_plot(params, param1, param2):
     ax.axhline(1, c="k", ls="--", alpha=0.5)
     ax.axvline(1, c="k", ls="--", alpha=0.5)
     ax.set_box_aspect(1)
-
-    # divider = make_axes_locatable(ax)
-    # cax = divider.append_axes("right", size="5%", pad=0.05)
-    # fig.add_axes(cax)
-    # plt.colorbar(CS, cax=cax, label=r"$\mathbf{I}_{ij}$")
     fig.colorbar(
         CS, label=r"$\mathbf{I}_{ij}$", ax=ax, fraction=0.046, pad=0.04
     )
@@ -105,7 +91,6 @@ def interaction_plot(params, param1, param2):
     ax = axs[1]
     combined_array = np.empty((6, 6))
 
-    # Set the diagonal to NaN
     np.fill_diagonal(combined_array, np.nan)
 
     for combo, pair in zip(norm_data, pair_array):
@@ -119,7 +104,6 @@ def interaction_plot(params, param1, param2):
 
     limits = lim_func(combined_array)
 
-    # for diff_type, color in zip([max_diff_array, min_diff_array], ['Blues', 'Reds_r']):
     cax = ax.imshow(
         combined_array,
         interpolation="nearest",
@@ -132,7 +116,6 @@ def interaction_plot(params, param1, param2):
     ax.set_xticklabels(param_labels)
     ax.set_yticklabels(param_labels)
 
-    # Add colorbar
     fig.colorbar(
         cax, label=r"$\mathbf{I}_{ij}$", ax=ax, fraction=0.046, pad=0.04
     )
