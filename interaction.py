@@ -64,7 +64,7 @@ async def interaction_plot(params, param1, param2):
             index = n
 
     axs: list[plt.Axes]
-    fig, axs = plt.subplots(ncols=2, figsize=(7, 14))
+    fig, axs = plt.subplots(ncols=2)
     ax = axs[0]
     CS = ax.contourf(
         values,
@@ -85,7 +85,6 @@ async def interaction_plot(params, param1, param2):
     ax.set_xscale("log")
     ax.axhline(1, c="k", ls="--", alpha=0.5)
     ax.axvline(1, c="k", ls="--", alpha=0.5)
-    ax.set_box_aspect(1)
     fig.colorbar(
         CS, label=r"$\mathbf{I}_{ij}$", ax=ax, fraction=0.046, pad=0.04
     )
