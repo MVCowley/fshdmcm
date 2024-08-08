@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 def plot_lifetime(input_param, real_params):
-    values, omega_s = analytical.calc_array(input_param, real_params, -4, 4)
+    values, omega_s = analytical.calc_array(input_param, real_params)
 
     colours = {
         field: f"C{n}" for n, field in enumerate(fields.get_field_strings())

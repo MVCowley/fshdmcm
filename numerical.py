@@ -1,3 +1,4 @@
+import logrange
 import math
 import numpy as np
 
@@ -77,7 +78,7 @@ def calc_pair_array(param_list) -> tuple[np.ndarray, np.ndarray]:
     )
 
     # Create numpy array with parameter ranges
-    values = np.logspace(-2, 2, 100)
+    values = logrange.get_small()
 
     # Create object to populate with calculated absorption times
     omega_s_array = np.full(
@@ -120,7 +121,7 @@ def gen_parameters(param, mod):
 
 def calc_singlet_omega_s_array(param_list):
     # Create numpy array with parameter ranges
-    values = np.logspace(-2, 2, 100)
+    values = logrange.get_small()
 
     # Create object to populate with calculated absorption times
     singlet_omega_s_array = np.full((len(param_list), len(values)), np.nan)

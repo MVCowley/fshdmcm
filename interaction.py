@@ -1,4 +1,5 @@
 import fields
+import logrange
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
 import numerical
@@ -8,7 +9,7 @@ import numpy as np
 def singlet_to_diff(
     singlet_omega_s_array, pair_array, omega_s_array, param_list
 ):
-    values = np.logspace(-2, 2, 100)
+    values = logrange.get_small()
     diff_omega_s_array = np.full(
         (len(pair_array), len(values), len(values)), np.nan
     )
@@ -38,7 +39,7 @@ def interaction_plot(params, param1, param2):
 
     param_labels = ["$V_D$", "$d_0$", "$V_T$", "$T_D$", "$D_r$", r"$\Delta$"]
 
-    values = np.logspace(-2, 2, 100)
+    values = logrange.get_small()
     base = numerical.calc_omega_s(params)
     norm_data = diff / base + 1
     cparam = np.max(norm_data)

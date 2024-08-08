@@ -1,3 +1,4 @@
+import logrange
 from numerical import calc_omega_s, calc_singlet_omega_s_array
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,7 +19,7 @@ def find_endog_deriv(param_n, omega_s_array, values):
 
 def plot_sensitivity(param_list):
 
-    values = np.logspace(-4, 4, 100)
+    values = logrange.get_large()
     base = calc_omega_s(param_list)
 
     omega_s_array = calc_singlet_omega_s_array(param_list) / base
