@@ -17,14 +17,14 @@ ui.page_opts(fillable=True, title="FSHD Markov Chain Model")
 with ui.sidebar():
 
     with ui.popover(id="btn_popover"):
-        ui.input_action_button("btn", "Symbols", class_="mt-3")
+        ui.input_action_button("btn", "Symbols and Rates", class_="mt-3")
 
-        "V_D = DUX4 transcription rate; "
-        "d_0 = DUX4 mRNA degradation rate; "
-        "V_T = D4T transcription rate; "
-        "T_D = DUX4 mRNA translation rate; "
-        "D_r = D4T+ myonuclear apoptosis rate; "
-        "Delta = DUX4 syncytial diffusion rate; "
+        "V_D = DUX4 transcription rate = 0.00211; "
+        "d_0 = DUX4 mRNA degradation rate = 0.246; "
+        "V_T = D4T transcription rate = 6.41; "
+        "T_D = DUX4 mRNA translation rate = 1 / 13; "
+        "D_r = D4T+ myonuclear apoptosis rate = 1 / 20.2; "
+        "Delta = DUX4 syncytial diffusion rate = 0.04023596; "
 
     ui.h5("Set base parameters:")
 
