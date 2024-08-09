@@ -86,7 +86,12 @@ async def interaction_plot(params, param1, param2):
     ax.axhline(1, c="k", ls="--", alpha=0.5)
     ax.axvline(1, c="k", ls="--", alpha=0.5)
     fig.colorbar(
-        CS, label=r"$\mathbf{I}_{ij}$", ax=ax, fraction=0.046, pad=0.04
+        CS,
+        label=r"$\mathbf{I}_{ij}$",
+        ax=ax,
+        fraction=0.046,
+        pad=0.04,
+        format=FormatStrFormatter("%.1f"),
     )
     fig.tight_layout()
 
@@ -119,6 +124,10 @@ async def interaction_plot(params, param1, param2):
     ax.set_yticklabels(param_labels)
 
     fig.colorbar(
-        cax, label=r"$\mathbf{I}_{ij}$", ax=ax, fraction=0.046, pad=0.04
+        cax,
+        label=r"$\mathbf{I}_{ij}$",
+        ax=ax,
+        fraction=0.046,
+        pad=0.04,
     )
     fig.tight_layout()
