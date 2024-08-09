@@ -1,10 +1,11 @@
 import asyncio
+import interaction
+import lifetime
 import numpy as np
+import pairwise
+import sensitivity
 from shiny import render, reactive
 from shiny.express import input, render, ui
-import lifetime
-import interaction
-import sensitivity
 
 import fields
 
@@ -114,6 +115,58 @@ with ui.navset_card_tab(id="tab"):
                 ]
 
                 sensitivity.plot_sensitivity(real_params)
+
+    with ui.nav_panel("Pairwise"):
+
+        with ui.card(full_screen=True):
+            choices = [field for field in FIELDS]
+            ui.input_selectize(
+                id="param1_pairwise",
+                label="Select first parameter",
+                choices=choices,
+                selected=choices[0],
+                width="33%",
+            )
+            ui.input_selectize(
+                id="param2_pairwise",
+                label="Select second parameter",
+                choices=choices,
+                selected=choices[1],
+                width="33%",
+            )
+
+            ui.input_task_button(
+                "go_pairwise", "Calculate!", class_="btn-success", width="33%"
+            )
+
+            @ui.bind_task_button(button_id="go_pairwise")
+            @reactive.extended_task
+            async def plot_pairwise(real_params, param1, param2):
+                await pairwise.plot_pairwise(real_params, param1, param2)
+
+            @reactive.effect
+            @reactive.event(
+                input.go_pairwise, ignore_none=False, ignore_init=True
+            )
+            def handle_click():
+                real_params = [
+                    (0.00211) * 10 ** input.vd(),
+                    (0.246) * 10 ** input.d0(),
+                    (6.41) * 10 ** input.vt(),
+                    (1 / 13) * 10 ** input.td(),
+                    (1 / 20.2) * 10 ** input.dr(),
+                    (0.04023596) * 10 ** input.delta(),
+                ]
+
+                plot_pairwise(
+                    real_params,
+                    input.param1_pairwise(),
+                    input.param2_pairwise(),
+                )
+
+            @render.plot(alt="A heatmap showing myonuclear lifetime")
+            def show_pairwise_plot():
+                return plot_pairwise.result()
 
     with ui.nav_panel("Interaction"):
 
