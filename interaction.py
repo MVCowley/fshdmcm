@@ -87,11 +87,11 @@ async def interaction_plot(params, param1, param2):
     ax.axvline(1, c="k", ls="--", alpha=0.5)
     fig.colorbar(
         CS,
-        label=r"$\mathbf{I}_{ij}$",
+        label=r"$I(x_i,x_j)$",
         ax=ax,
         fraction=0.046,
         pad=0.04,
-        format=FormatStrFormatter("%.1f"),
+        format=FormatStrFormatter("%.0f"),
     )
     fig.tight_layout()
 
@@ -125,7 +125,7 @@ async def interaction_plot(params, param1, param2):
 
     fig.colorbar(
         cax,
-        label=r"$\mathbf{I}_{ij}$",
+        label=r"$\mathrm{extremum}\left(\mathbf{I}_{ij}\right)$",
         ax=ax,
         fraction=0.046,
         pad=0.04,
