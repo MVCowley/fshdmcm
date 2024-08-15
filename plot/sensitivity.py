@@ -1,5 +1,5 @@
-import logrange
-from numerical import calc_omega_s, calc_singlet_omega_s_array
+import util.logrange as logrange
+from model.numerical import calc_omega_s, calc_singlet_omega_s_array
 import numpy as np
 import matplotlib.pyplot as plt
 

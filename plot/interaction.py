@@ -1,8 +1,8 @@
-import fields
-import logrange
+import util.fields as fields
+import util.logrange as logrange
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
-import numerical
+import model.numerical as numerical
 import numpy as np
 
 

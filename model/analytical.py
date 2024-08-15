@@ -1,6 +1,6 @@
 import copy
-import fields
-import logrange
+import util.fields as fields
+import util.logrange as logrange
 import matplotlib.pyplot as plt
 import numpy as np
 

@@ -1,13 +1,13 @@
 import asyncio
-import interaction
-import lifetime
+import plot.interaction as interaction
+import plot.lifetime as lifetime
 import numpy as np
-import pairwise
-import sensitivity
+import plot.pairwise as pairwise
+import plot.sensitivity as sensitivity
 from shiny import render, reactive
 from shiny.express import input, render, ui
 
-import fields
+import util.fields as fields
 
 FIELDS = fields.get_field_strings()
 

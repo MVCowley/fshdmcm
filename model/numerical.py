@@ -1,4 +1,4 @@
-import logrange
+import util.logrange as logrange
 import math
 import numpy as np
 

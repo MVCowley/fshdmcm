@@ -1,5 +1,5 @@
-import analytical
-import fields
+import model.analytical as analytical
+import util.fields as fields
 import matplotlib.pyplot as plt
 
 
