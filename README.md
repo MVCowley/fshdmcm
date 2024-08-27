@@ -1,12 +1,14 @@
-# fshdmcm
+# `fshdmcm`
 
 ## Running the app
 
-This repository holds code for a shiny app supporting a manuscript in preparation.
-Further details will be added shortly once the preprint is available.
+`fshdmcm` is a `shiny` app written to support a bioRxiv preprint: [Quantifying anti-DUX4 therapy for facioscapulohumeral muscular dystrophy](https://www.biorxiv.org/content/10.1101/2024.08.14.607973v1).
+This work aims to explore the comparative efficacy of different anti-DUX4 therapeutic strategies for FSHD.
+While reading the manuscript, use the app to further interrogate the model space and test any parameter combinations you find interesting.
 The app can be accessed [here](https://mcowley.shinyapps.io/fshdmcm/).
+A desktop browser is recommended.
 
-If you would like to run the app locally, clone the repository, and then install the required python packages with:
+If you would like to run the app locally, clone the repository, create a new virtual environment, and then install the required python packages with:
 
 ```python3
 pip install -r requirements.txt
@@ -23,7 +25,7 @@ Tested with Python 3.9.19.
 ## Development
 
 As this is a shiny app, it is not a directly installable python package.
-To run the tests, first install pytest into the environment you installed the requirements, via:
+To run the tests, using the same virtual environment as the app, install pytest via:
 
 ```shell
 pip install pytest
